@@ -21,12 +21,12 @@ public class OrderServiceImpl implements OrderService {
     OrderDao orderDao;
 
     @Autowired
-    WebClient webClient;
+    WebClient.Builder webClient;
 
     @Override
     public void placeOrder(OrderRequest orderRequest) {
-        ResponseEntity<ArrayList> inventoryClient = this.webClient.post()
-                .uri("http://localhost:8083/api/inventory/in-stock")
+        ResponseEntity<ArrayList> inventoryClient = this.webClient.build().post()
+                .uri("lb://inventory-service/api/inventory/in-stock")
                 .bodyValue(orderRequest.getProducts())
                 .retrieve()
                 .toEntity(ArrayList.class)
